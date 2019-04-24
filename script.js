@@ -1,9 +1,11 @@
        
 class Timers{
-       constructor(sec,interval){
+       constructor(sec,interval,autoStart){
               this.sec=1000*sec;
               this.interval=1000*interval;
+              this.autoStart=autoStart;
               this.bloks();
+              this.start();
 
        }
        bloks(){
@@ -11,7 +13,6 @@ class Timers{
             //час
             this.timeBlock=document.createElement('div');
             this.bigBlock.appendChild(this.timeBlock);
-            this.timeBlock.textContent=this.setTime;
             //кнопка
             this.button = document.createElement('button');
             this.bigBlock.appendChild(this.button);
@@ -20,43 +21,54 @@ class Timers{
             this.wholeLine=document.createElement('div');
             this.bigBlock.appendChild(this.wholeLine);
             this.wholeLine.classList.add('line');
-            ///функція
-            this.button.addEventListener('click',this.pressButton.bind(this));
-       }
-      setTime(sec){
+           
             
-             var mins = parseInt(sec / 60);
-             var secs = sec % 60;
-             this.timeBlock.innerHTML=  parseInt(mins) + ':' + (secs < 10 ? '0' : '') + (secs % 60);
-             
+       }
+       start(){
+              if (this.autoStart===true) {
+                     this.button.textContent = 'STOP';
+                     this.startTimer();
+              } else {
+                     this.button.textContent = 'START';
+                     this.button.addEventListener('click', this.pressButton.bind(this));
+              }
+       }
+      setTime(){
+            
+             const minutes = Math.floor(this.sec / 60);
+             const seconds = this.sec % 60;
+             this.blockTimer.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
              
 }
        startTimer(){
-              const id = setInterval((interval) => {
+              const id = setInterval(() => {
                      if (this.sec>0) {
-                            this.sec -= interval;
+                            this.sec -= this.interval;
                             const lineSize = this.wholeLine.offsetWidth;
-                            const step = lineSize / sec;
+                            const step = lineSize / this.sec;
                             this.wholeLine.style.width = `${lineSize - step}px`;
 
                      } else {
-                            clearInterval(id)
+                            clearInterval(this.id)
                      }
                      
-              }, interval);
+              }, this.interval);
        }
 
        pressButton(){
               if (this.button.textContent ='START') {
                      this.button.textContent = 'STOP';
                      this.startTimer();
-              } else {
-                     this.button.textContent ='START';
-               
+              }else{
+                     (this.button.textContent = 'START'); 
+                     this.startTimer();
               }
        }
               
        }
-const timerFirst = new Timers(800,1)
+const timerFirst = new Timers(80, 1, false)      
+const timerSecond = new Timers(50,2,true)
+
 
 
