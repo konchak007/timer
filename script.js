@@ -44,10 +44,14 @@ class Timer{
              
 }
        minusTime(){
-             
-              
-              
-               this.minusLine();
+           if (this.sec>0) {
+                  this.sec -= this.interval;
+                  this.minusLine();
+           }else{
+                  this.stopTimer();
+           }
+             this.setTime();
+               
        }
        stopTimer(){
               clearInterval(this.id);
@@ -61,7 +65,7 @@ class Timer{
        startTimer(){
               this.id = setInterval(() => {
                             this.minusTime();
-              }, this.interval);
+              }, this.interval*1000);
        }
        changeButtons(){
               if (this.button.textContent === 'START') {
@@ -75,10 +79,10 @@ class Timer{
               } 
        }
 
-         
+       
        }
-const timerFirst = new Timer(5, 1, false)      
-const timerSecond = new Timer(1000,2,true)
+const timerFirst = new Timer(10, 1, false)      
+const timerSecond = new Timer(100,2,true)
 
 
 
