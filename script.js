@@ -1,12 +1,13 @@
        
-class Timers{
+class Timer{
        constructor(sec,interval,autoStart){
-              this.sec=1000*sec;
-              this.interval=1000*interval;
+              this.sec=sec;
+              this.interval=interval;
               this.autoStart=autoStart;
               this.bloks();
+              this.setTime();
               this.start();
-
+             
        }
        bloks(){
             this.bigBlock = document.querySelector('#container');
@@ -15,60 +16,69 @@ class Timers{
             this.bigBlock.appendChild(this.timeBlock);
             //кнопка
             this.button = document.createElement('button');
-            this.bigBlock.appendChild(this.button);
-            this.button.textContent='START';
+            this.bigBlock.appendChild(this.button);  
             //лінія
             this.wholeLine=document.createElement('div');
             this.bigBlock.appendChild(this.wholeLine);
             this.wholeLine.classList.add('line');
+            //
+            this.button.addEventListener('click', this.changeButtons.bind(this));
            
             
        }
        start(){
-              if (this.autoStart===true) {
+              if (this.autoStart) { 
                      this.button.textContent = 'STOP';
                      this.startTimer();
               } else {
                      this.button.textContent = 'START';
-                     this.button.addEventListener('click', this.pressButton.bind(this));
+                   
               }
+              
        }
       setTime(){
             
              const minutes = Math.floor(this.sec / 60);
              const seconds = this.sec % 60;
-             this.blockTimer.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
+             this.timeBlock.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
              
 }
-       startTimer(){
-              const id = setInterval(() => {
-                     if (this.sec>0) {
-                            this.sec -= this.interval;
-                            const lineSize = this.wholeLine.offsetWidth;
+       minusTime(){
+             
+              
+              
+               this.minusLine();
+       }
+       stopTimer(){
+              clearInterval(this.id);
+       }
+       minusLine(){
+               const lineSize = this.wholeLine.offsetWidth;
                             const step = lineSize / this.sec;
                             this.wholeLine.style.width = `${lineSize - step}px`;
-
-                     } else {
-                            clearInterval(this.id)
-                     }
-                     
+                            
+       }
+       startTimer(){
+              this.id = setInterval(() => {
+                            this.minusTime();
               }, this.interval);
        }
+       changeButtons(){
+              if (this.button.textContent === 'START') {
+                     this.button.textContent ='STOP';
+                     this.startTimer();
+                
+              } else {
+                     
+                     this.button.textContent ='START';
+                     this.stopTimer();
+              } 
+       }
 
-       pressButton(){
-              if (this.button.textContent ='START') {
-                     this.button.textContent = 'STOP';
-                     this.startTimer();
-              }else{
-                     (this.button.textContent = 'START'); 
-                     this.startTimer();
-              }
+         
        }
-              
-       }
-const timerFirst = new Timers(80, 1, false)      
-const timerSecond = new Timers(50,2,true)
+const timerFirst = new Timer(5, 1, false)      
+const timerSecond = new Timer(1000,2,true)
 
 
 
